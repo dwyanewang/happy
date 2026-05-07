@@ -30,11 +30,9 @@ export async function authApprove(token: string, publicKey: Uint8Array, answerV1
     
     // Handle different status cases
     if (status === 'not_found') {
-        // Already authorized, no need to approve again
-        console.log('Auth request already authorized or not found');
-        return;
+        throw new Error('Auth request not found on server. The CLI and app may be connected to different servers.');
     }
-    
+
     if (status === 'authorized') {
         // Already authorized, no need to approve again
         console.log('Auth request already authorized');

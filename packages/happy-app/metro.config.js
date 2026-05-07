@@ -1,9 +1,22 @@
 const { getDefaultConfig } = require("expo/metro-config");
+const path = require("path");
 
-const config = getDefaultConfig(__dirname, {
+const projectRoot = __dirname;
+const workspaceRoot = path.resolve(projectRoot, "../..");
+
+const config = getDefaultConfig(projectRoot, {
   // Enable CSS support for web
   isCSSEnabled: true,
 });
+
+// Monorepo support: watch workspace root for changes
+config.watchFolders = [workspaceRoot];
+
+// Resolve node_modules from both project root and workspace root
+config.resolver.nodeModulesPaths = [
+  path.resolve(projectRoot, "node_modules"),
+  path.resolve(workspaceRoot, "node_modules"),
+];
 
 // Add support for .wasm files (required by Skia for all platforms)
 // Source: https://shopify.github.io/react-native-skia/docs/getting-started/installation/

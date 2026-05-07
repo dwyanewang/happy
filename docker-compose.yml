@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  happy-server:
+    image: happy-server:latest
+    container_name: happy-server
+    networks:
+      - happy-net
+    ports:
+      - "3005:3005"
+    restart: unless-stopped
+
+  happy-web:
+    image: happy-web:latest
+    container_name: happy-web
+    networks:
+      - happy-net
+    ports:
+      - "3006:80"
+    environment:
+      - EXPO_PUBLIC_HAPPY_SERVER_URL=http://happy-server:3005
+    restart: unless-stopped
+
+  npc:
+    image: yisier1/npc:latest
+    container_name: npc
+    networks:
+      - happy-net
+    command: ["-server=${NPS_SERVER_ADDR}", "-vkey=${NPS_VKEY}", "-type=tcp"]
+    restart: unless-stopped
+
+networks:
+  happy-net:
+    driver: bridge

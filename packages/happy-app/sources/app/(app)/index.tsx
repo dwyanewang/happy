@@ -14,6 +14,7 @@ import { trackAccountCreated, trackAccountRestored } from '@/track';
 import { HomeHeaderNotAuth } from "@/components/HomeHeader";
 import { MainView } from "@/components/MainView";
 import { t } from '@/text';
+import { Modal } from '@/modal';
 
 export default function Home() {
     const auth = useAuth();
@@ -44,8 +45,12 @@ function NotAuthenticated() {
                 await auth.login(token, encodeBase64(secret, 'base64url'));
                 trackAccountCreated();
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error creating account', error);
+            Modal.alert(
+                t('common.error'),
+                error?.message || t('server.failedToConnectToServer')
+            );
         }
     }
 

@@ -23,20 +23,18 @@ COPY packages/happy-server/prisma packages/happy-server/prisma
 COPY packages/happy-cli/scripts packages/happy-cli/scripts
 COPY packages/happy-cli/tools packages/happy-cli/tools
 
-RUN SKIP_HAPPY_WIRE_BUILD=1 pnpm install --frozen-lockfile
+RUN SKIP_HAPPY_WIRE_BUILD=1 pnpm install --no-frozen-lockfile
 
 # Stage 2: build the web app
 FROM deps AS builder
 
 ARG POSTHOG_API_KEY=""
 ARG REVENUE_CAT_STRIPE=""
-ARG EXPO_PUBLIC_SERVER_URL=""
 
 ENV NODE_ENV=production
 ENV APP_ENV=production
 ENV EXPO_PUBLIC_POSTHOG_API_KEY=$POSTHOG_API_KEY
 ENV EXPO_PUBLIC_REVENUE_CAT_STRIPE=$REVENUE_CAT_STRIPE
-ENV EXPO_PUBLIC_SERVER_URL=$EXPO_PUBLIC_SERVER_URL
 
 COPY packages/happy-wire ./packages/happy-wire
 COPY packages/happy-app ./packages/happy-app
@@ -97,7 +95,11 @@ RUN echo 'server { \
     } \
 }' > /etc/nginx/conf.d/default.conf
 
+# Copy and set up runtime entrypoint for injecting env vars into the web app
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
 # Expose the standard nginx port
 EXPOSE 80
 
-# Nginx starts automatically in the foreground with CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/docker-entrypoint.sh"]

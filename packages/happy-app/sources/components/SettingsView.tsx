@@ -357,15 +357,13 @@ export const SettingsView = React.memo(function SettingsView() {
             </ItemGroup>
 
             {/* Developer */}
-            {(__DEV__ || devModeEnabled) && (
-                <ItemGroup title={t('settings.developer')}>
-                    <Item
-                        title={t('settings.developerTools')}
-                        icon={<Ionicons name="construct-outline" size={29} color="#5856D6" />}
-                        onPress={() => router.push('/dev')}
-                    />
-                </ItemGroup>
-            )}
+            <ItemGroup title={t('settings.developer')}>
+                <Item
+                    title={t('settings.developerTools')}
+                    icon={<Ionicons name="construct-outline" size={29} color="#5856D6" />}
+                    onPress={() => router.push('/dev')}
+                />
+            </ItemGroup>
 
             {/* About */}
             <ItemGroup title={t('settings.about')} footer={t('settings.aboutFooter')}>

@@ -39,6 +39,21 @@ export const ApiDeleteMachineSchema = z.object({
     machineId: z.string(),
 });
 
+export const ApiNewMachineSchema = z.object({
+    t: z.literal('new-machine'),
+    machineId: z.string(),
+    seq: z.number(),
+    metadata: z.string(),
+    metadataVersion: z.number(),
+    daemonState: z.string().nullable(),
+    daemonStateVersion: z.number(),
+    dataEncryptionKey: z.string().nullable(),
+    active: z.boolean(),
+    activeAt: z.number(),
+    createdAt: z.number(),
+    updatedAt: z.number()
+});
+
 export const ApiUpdateAccountSchema = z.object({
     t: z.literal('update-account'),
     id: z.string(),
@@ -124,6 +139,7 @@ export const ApiUpdateSchema = z.union([
     ApiDeleteSessionSchema,
     ApiUpdateSessionStateSchema,
     ApiUpdateAccountSchema,
+    ApiNewMachineSchema,
     ApiUpdateMachineStateSchema,
     ApiDeleteMachineSchema,
     ApiNewArtifactSchema,
